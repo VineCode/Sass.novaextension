@@ -1,5 +1,5 @@
 # ChangeLog
 
-## Version 1.0.0
+## Version 0.5
 
-- Initial release.
+- Basic functional release
