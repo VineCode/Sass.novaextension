@@ -5,18 +5,16 @@
 // Copyright © 2020 Vine Code Limited. All rights reserved.
 //
 
-const EditorConfigService = require('./EditorConfigService');
 const NovaSassService = require('./NovaSassService');
 
 exports.activate = function() {
-	const editorConfigService = new EditorConfigService();
-	const novaSass = new NovaSassService(editorConfigService);
+	const novaSass = new NovaSassService();
 
 	// "Compile on Save"
 	nova.workspace.onDidAddTextEditor(editor => {
-		return editor.onWillSave(novaSass.compileSassFile.bind(novaSass));
+		return editor.onWillSave(novaSass.compileSassUpdate.bind(novaSass));
 	});
 
 	// "Compile SCSS" Action
-	nova.commands.register('novaSass.compile', novaSass.compileSass);
+	nova.commands.register('novaSass.compileFile', novaSass.compileSassFile);
 };

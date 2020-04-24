@@ -10,3 +10,11 @@ Requires the sass binary. This can be installed via Homebrew (https://brew.sh )
 
 * Auto compiles scss files on save
 * Compile scss on demand via the Editor menu
+
+# TODO
+
+* [] For the Editor Compile, ensure this only compiles the current file
+* [] Add Preferences for style. expanded (default), compressed
+* [] Add preferences for [no-]indented
+* [] Add preferences for --[no-]error-css
+* [] Add preferences for creating a .map file
