@@ -1,5 +1,5 @@
 {
-    "identifier": "vinecodelimited.NovaSass",
+    "identifier": "vinecode.NovaSass",
     "name": "NovaSass",
     "vendor": "Vine Code Limited",
     "description": "Automatically compile scss when the active editor saves.",
