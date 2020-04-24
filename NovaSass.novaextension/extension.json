@@ -1,0 +1,31 @@
+{
+    "identifier": "vinecodelimited.NovaSass",
+    "name": "NovaSass",
+    "vendor": "Vine Code Limited",
+    "description": "Lorem ipsum, dolor sit amet.",
+    "version": "1.0",
+    "categories": ["formatters"],
+    "repository": "https://github.com/vinecode/NovaSass",
+    "bugs": "https://github.com/vinecode/NovaSass/issues",    
+    "license": "MIT",
+    "entitlements": {
+        "process": true
+    },    
+    "commands": {
+        "editor": [
+            {
+                "title": "Compile SCSS",
+                "command": "novaSass.compile"
+            }
+        ]
+    },
+    "config": [
+        {
+            "key": "VineCode.Sass.compileOnSave",
+            "title": "Compile on Save",
+            "description": "Automatically compile scss when the active editor saves.",
+            "type": "boolean",
+            "default": true
+        }
+    ]    
+}
