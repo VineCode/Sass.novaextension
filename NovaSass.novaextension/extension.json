@@ -3,7 +3,7 @@
     "name": "NovaSass",
     "vendor": "Vine Code Limited",
     "description": "Automatically compile scss when the active editor saves.",
-    "version": "0.6",
+    "version": "0.6.1",
     "categories": ["formatters"],
     "repository": "https://github.com/vinecode/NovaSass",
     "bugs": "https://github.com/vinecode/NovaSass/issues",    
@@ -12,16 +12,6 @@
     "entitlements": {
         "process": true
     },    
-    "commands": {
-        "editor": [
-            {
-                "title": "Compile SCSS",
-                "command": "novaSass.compileFile",
-                "when": "editorSyntax == 'scss'"
-             
-            }
-        ]
-    },
     "config": [        
         {
             "key": "VineCode.NovaSass.compileOnSave",

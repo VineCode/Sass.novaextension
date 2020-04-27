@@ -14,8 +14,4 @@ exports.activate = function() {
 	nova.workspace.onDidAddTextEditor(editor => {
 		return editor.onWillSave(novaSass.compileSassUpdate.bind(novaSass));
 	});
-
-	// "Compile SCSS" Action
-	nova.commands.register('novaSass.compileFile', novaSass.compileSassFile);
-
 };
