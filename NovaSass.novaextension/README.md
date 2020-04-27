@@ -26,6 +26,3 @@ Before using this extension, you must ensure that `sass` is installed on your sy
 | Error CSS           | On, Off                 | Tells Sass whether to emit a CSS file when an error occurs<br/>during compilation                                                                                                                                                    |
 | Generate Source Map | External, Internal, Off | Source maps are files that tell browsers or other tools that <br>consume CSS how that CSS corresponds to the Sass files from <br>which it was generated. They make it possible to see and even <br>edit your Sass files in browsers. |
 
-## Features
-
-* Auto compiles scss files on save
