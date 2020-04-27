@@ -3,11 +3,11 @@
     "name": "NovaSass",
     "vendor": "Vine Code Limited",
     "description": "Automatically compile scss when the active editor saves.",
-    "version": "0.5",
+    "version": "0.5.1",
     "categories": ["formatters"],
     "repository": "https://github.com/vinecode/NovaSass",
     "bugs": "https://github.com/vinecode/NovaSass/issues",    
-    "license": "MIT",
+    
     "main": "main.js",
     "entitlements": {
         "process": true
@@ -16,17 +16,51 @@
         "editor": [
             {
                 "title": "Compile SCSS",
-                "command": "novaSass.compileFile"
+                "command": "novaSass.compileFile",
+                "when": "editorSyntax == 'scss'"
+             
             }
         ]
     },
-    "config": [
+    "config": [        
         {
-            "key": "VineCode.Sass.compileOnSave",
+            "key": "VineCode.NovaSass.compileOnSave",
             "title": "Compile on Save",
-            "description": "Automatically compile scss when the active editor saves.",
-            "type": "boolean",
-            "default": true
-        }
+            "description": "Automatically compile scss files on save.",
+            "type": "enum",
+            "values": ["Yes", "No"],
+            "default": "Yes"  
+        },
+        {
+            "key": "VineCode.NovaSass.cssStyle",
+            "title": "CSS Style",
+            "description": "Controls the output style of the resulting CSS.",
+            "type": "enum",
+            "values": ["Expanded", "Compressed"],
+            "default": "Expanded"               
+        },
+        {
+            "key": "VineCode.NovaSass.errorCss",
+            "title": "Error CSS",
+            "description": "Tells Sass whether to emit a CSS file when an error occurs during compilation.",
+            "type": "enum",
+            "values": ["Yes", "No"],
+            "default": "Yes" 
+        },
+        {
+            "key": "VineCode.NovaSass.generateSourceMap",
+            "title": "Generate Source Map",
+            "description": "Source maps are files that tell browsers or other tools that consume CSS how that CSS corresponds to the Sass files from which it was generated. They make it possible to see and even edit your Sass files in browsers.",
+            "type": "enum",
+            "values": ["Yes", "No"],
+            "default": "Yes" 
+        },
+        {
+            "key": "VineCode.NovaSass.execPath",
+            "title": "Executable Path",
+            "type": "path",
+            "description": "Manually set the path for the sass executable.",
+            "placeholder": "/usr/local/bin/sass" 
+        }     
     ]    
 }
