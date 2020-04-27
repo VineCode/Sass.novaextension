@@ -3,7 +3,7 @@
     "name": "NovaSass",
     "vendor": "Vine Code Limited",
     "description": "Automatically compile scss files on save.",
-    "version": "0.6.3",
+    "version": "0.6.4",
     "categories": ["formatters"],
     "repository": "https://github.com/vinecode/NovaSass",
     "bugs": "https://github.com/vinecode/NovaSass/issues",    
@@ -13,14 +13,6 @@
         "process": true
     },    
     "config": [        
-        {
-            "key": "VineCode.NovaSass.compileOnSave",
-            "title": "Compile on Save",
-            "description": "Automatically compile scss files on save.",
-            "type": "enum",
-            "values": ["Yes", "No"],
-            "default": "Yes"  
-        },
         {
             "key": "VineCode.NovaSass.cssStyle",
             "title": "CSS Style",
