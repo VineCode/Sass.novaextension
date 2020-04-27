@@ -84,7 +84,10 @@ class NovaSassService {
     process.onDidExit(function() {
       if(stdErr.length > 0) {
         
-        var message = stdErr[0] + "\n" + stdErr[stdErr.length-1];
+        var message = stdErr[0] + "\n";
+        if(stdErr.length > 1) {
+          message = message + stdErr[stdErr.length-1];
+        }
    
         let request = new NotificationRequest("invalid-file");      
         request.title = nova.localize("Sass Compile Error");

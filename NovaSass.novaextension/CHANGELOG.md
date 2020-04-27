@@ -1,5 +1,8 @@
 # ChangeLog
 
+## Version 0.6.5
+- Bug fix if only one line of message
+
 ## Version 0.6.4
 - Remove unused preference
 

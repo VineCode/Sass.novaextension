@@ -3,7 +3,7 @@
     "name": "NovaSass",
     "vendor": "Vine Code Limited",
     "description": "Automatically compile scss files on save.",
-    "version": "0.6.4",
+    "version": "0.6.5",
     "categories": ["formatters"],
     "repository": "https://github.com/vinecode/NovaSass",
     "bugs": "https://github.com/vinecode/NovaSass/issues",    
