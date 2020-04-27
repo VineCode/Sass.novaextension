@@ -11,7 +11,7 @@ class NovaSassService {
 	}
 
 	get isCompileOnSavePreferenceEnabled() {
-		return nova.config.get('VineCode.Sass.compileOnSave');
+		return nova.config.get('VineCode.NovaSass.compileOnSave');
 	}
 
   async compileSassUpdate(editor) {
@@ -43,8 +43,7 @@ class NovaSassService {
     var target   = source.replace('.scss', '.css');
 
     if(source.slice((source.lastIndexOf(".") - 1 >>> 0) + 2) != 'scss') {
-      let request = new NotificationRequest("foobar-not-found");
-      
+      let request = new NotificationRequest("invalid-file");      
       request.title = nova.localize("Non valid file type");
       request.body = nova.localize("This action can only be performed on scss files.");  
       request.actions = [nova.localize("OK")];
