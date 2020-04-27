@@ -17,4 +17,5 @@ exports.activate = function() {
 
 	// "Compile SCSS" Action
 	nova.commands.register('novaSass.compileFile', novaSass.compileSassFile);
+
 };

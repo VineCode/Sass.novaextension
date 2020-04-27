@@ -3,7 +3,7 @@
     "name": "NovaSass",
     "vendor": "Vine Code Limited",
     "description": "Automatically compile scss when the active editor saves.",
-    "version": "0.5.1",
+    "version": "0.6",
     "categories": ["formatters"],
     "repository": "https://github.com/vinecode/NovaSass",
     "bugs": "https://github.com/vinecode/NovaSass/issues",    
@@ -48,11 +48,11 @@
             "default": "Yes" 
         },
         {
-            "key": "VineCode.NovaSass.generateSourceMap",
+            "key": "VineCode.NovaSass.sourceMap",
             "title": "Generate Source Map",
             "description": "Source maps are files that tell browsers or other tools that consume CSS how that CSS corresponds to the Sass files from which it was generated. They make it possible to see and even edit your Sass files in browsers.",
             "type": "enum",
-            "values": ["Yes", "No"],
+            "values": ["External", "Embedded", "None"],
             "default": "Yes" 
         },
         {

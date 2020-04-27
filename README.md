@@ -1,6 +1,6 @@
 # Sass Extension for Nova
 
-Converts scss files into css files automatically on save or via the Editor menu option.
+Converts scss files into css files automatically on save.
 
 ## Requirements
 
@@ -30,14 +30,12 @@ Before using this extension, you must ensure that `sass` is installed on your sy
 ## Features
 
 * Auto compiles scss files on save
-* Compile scss on demand via the Editor menu
 
 # TODO
 
 * [ ] Check that the sass binary is available
-* [ ] Add Preferences for style. expanded (default), compressed
-* [ ] Add preferences for --[no-]error-css
-* [ ] Add preferences for creating a .map file
-
+* [x] Add Preferences for style. expanded (default), compressed
+* [x] Add preferences for --[no-]error-css
+* [x] Add preferences for creating a .map file
 * [x] For the Editor Compile, ensure this only compiles the current file
 * [x] Give notification if not a valid file type
