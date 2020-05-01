@@ -59,15 +59,19 @@ class NovaSassService {
     // Check that this is enabled 
     if(source.slice((source.lastIndexOf(".") - 1 >>> 0) + 2) != 'scss') { return }
 
-    var path = nova.workspace.path;
+    // Get the parent directory
+    var path = source.substr(0, source.lastIndexOf("/"));  
+    
+    // If the current directory is scss move up a level
+    if(path.substr(path.lastIndexOf("/") + 1).toLowerCase() == 'scss') {
+        path = path.substr(0, path.lastIndexOf("/")); 
+    }
         
     var args = this.getArgs;
         args.push('--update');
         args.push(path);        
 
     var options = { args: args };
-    
-    console.log(args.join(' '));
 
     var process = new Process("/usr/bin/env", options);
     
@@ -82,24 +86,34 @@ class NovaSassService {
     });
 
     process.onDidExit(function() {
+      
       if(stdErr.length > 0) {
+
+        if(nova._notificationTimer) {
+          clearTimeout(nova._notificationTimer);
+        }        
         
         var message = stdErr[0] + "\n";
         if(stdErr.length > 1) {
           message = message + stdErr[stdErr.length-1];
         }
    
-        let request = new NotificationRequest("invalid-file");      
+        let request = new NotificationRequest("sass-error");      
         request.title = nova.localize("Sass Compile Error");
         request.body = nova.localize(stdErr[0] + "\n" + stdErr[stdErr.length-1]);  
         request.actions = [nova.localize("Dismiss")];        
         let promise = nova.notifications.add(request);
-             
-        // nova.workspace.showErrorMessage(message);
-      } 
+        
+        // hide the notification after 5 seconds
+        nova._notificationTimer = setTimeout(function() { 
+          nova.notifications.cancel("sass-error");         
+        }, 10000);
+
+      } else {
+        // Hide any notifications of the previous error
+        nova.notifications.cancel("sass-error");          
+      }
       
-      console.log(stdOut);
-      console.log(stdErr);
     });
 
     process.start();

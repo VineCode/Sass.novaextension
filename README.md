@@ -20,9 +20,14 @@ Before using this extension, you must ensure that `sass` is installed on your sy
 
 ## Preferences 
 
-| Preference          | Options                 | Summary                                                                                                                                                                                                                              |
-|---------------------|-------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| CSS Style           | Expanded, Compressed    | Controls the output style of the resulting CSS                                                                                                                                                                                       |
-| Error CSS           | On, Off                 | Tells Sass whether to emit a CSS file when an error occurs<br/>during compilation                                                                                                                                                    |
-| Generate Source Map | External, Internal, Off | Source maps are files that tell browsers or other tools that <br>consume CSS how that CSS corresponds to the Sass files from <br>which it was generated. They make it possible to see and even <br>edit your Sass files in browsers. |
+**CSS Style** <br/>
+`Expanded, Compressed`
+<br/>Controls the output style of the resulting CSS  
 
+**Error CSS**<br/>
+`On, Off`<br/>
+Tells Sass whether to emit a CSS file when an error occurs during compilation   
+
+**Generate Source Map**<br/>
+`External, Internal, Off`<br/>
+Source maps are files that tell browsers or other tools that consume CSS how that CSS corresponds to the Sass files from which it was generated. They make it possible to see and even edit your Sass files in browsers. 
