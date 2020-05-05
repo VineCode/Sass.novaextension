@@ -5,13 +5,13 @@
 // Copyright © 2020 Vine Code Limited. All rights reserved.
 //
 
-const NovaSassService = require('./NovaSassService');
+const SassService = require('./SassService');
 
 exports.activate = function() {
-	const novaSass = new NovaSassService();
+	const Sass = new SassService();
 
 	// "Compile on Save"
 	nova.workspace.onDidAddTextEditor(editor => {
-		return editor.onWillSave(novaSass.compileSassUpdate.bind(novaSass));
+		return editor.onWillSave(Sass.compileSassUpdate.bind(Sass));
 	});
 };

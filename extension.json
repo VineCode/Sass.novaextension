@@ -1,12 +1,12 @@
 {
-    "identifier": "vinecode.NovaSass",
-    "name": "NovaSass",
+    "identifier": "vinecode.Sass",
+    "name": "Sass",
     "vendor": "Vine Code Limited",
     "description": "Automatically compile scss files on save.",
-    "version": "0.9",
+    "version": "1.0",
     "categories": ["formatters"],
-    "repository": "https://github.com/vinecode/NovaSass",
-    "bugs": "https://github.com/vinecode/NovaSass/issues",    
+    "repository": "https://github.com/vinecode/Sass.novaextension",
+    "bugs": "https://github.com/vinecode/Sass.novaextension/issues",    
     
     "main": "main.js",
     "entitlements": {
@@ -14,7 +14,7 @@
     },    
     "config": [        
         {
-            "key": "VineCode.NovaSass.cssStyle",
+            "key": "VineCode.Sass.cssStyle",
             "title": "CSS Style",
             "description": "Controls the output style of the resulting CSS.",
             "type": "enum",
@@ -22,7 +22,7 @@
             "default": "Expanded"               
         },
         {
-            "key": "VineCode.NovaSass.errorCss",
+            "key": "VineCode.Sass.errorCss",
             "title": "Error CSS",
             "description": "Tells Sass whether to emit a CSS file when an error occurs during compilation.",
             "type": "enum",
@@ -30,7 +30,7 @@
             "default": "Yes" 
         },
         {
-            "key": "VineCode.NovaSass.sourceMap",
+            "key": "VineCode.Sass.sourceMap",
             "title": "Generate Source Map",
             "description": "Source maps are files that tell browsers or other tools that consume CSS how that CSS corresponds to the Sass files from which it was generated. They make it possible to see and even edit your Sass files in browsers.",
             "type": "enum",
@@ -38,7 +38,7 @@
             "default": "Yes" 
         },
         {
-            "key": "VineCode.NovaSass.execPath",
+            "key": "VineCode.Sass.execPath",
             "title": "Executable Path",
             "type": "path",
             "description": "Manually set the path for the sass executable.",

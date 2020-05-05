@@ -1,5 +1,8 @@
 # ChangeLog
 
+## Version 1.0
+- Icon change and internal re-structure
+
 ## Version 0.9
 - Auto hide the error notification after 10 seconds or if the file is re-saved without an error.
 - Other bug fixes

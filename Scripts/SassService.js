@@ -5,17 +5,17 @@
 // Copyright © 2020 Vine Code Limited. All rights reserved.
 //
 
-class NovaSassService {
+class SassService {
 	constructor() {
 
 	}
 
   get getArgs() {
     
-    var cssStyle  = nova.config.get('VineCode.NovaSass.cssStyle');
-    var errorCss  = nova.config.get('VineCode.NovaSass.errorCss');
-    var sourceMap = nova.config.get('VineCode.NovaSass.sourceMap'); 
-    var execPath  = nova.config.get('VineCode.NovaSass.execPath');       
+    var cssStyle  = nova.config.get('VineCode.Sass.cssStyle');
+    var errorCss  = nova.config.get('VineCode.Sass.errorCss');
+    var sourceMap = nova.config.get('VineCode.Sass.sourceMap'); 
+    var execPath  = nova.config.get('VineCode.Sass.execPath');       
     
     if(!execPath) {
       execPath = 'sass';
@@ -122,4 +122,4 @@ class NovaSassService {
   }
 }
 
-module.exports = NovaSassService;
+module.exports = SassService;

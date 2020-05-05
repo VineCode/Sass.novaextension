@@ -21,7 +21,7 @@ Before using this extension, you must ensure that `sass` is installed on your sy
 
 1. Open Nova.
 2. Choose menu **Extensions** > **Extension Library...**
-3. Search extension `NovaSass`
+3. Search extension `Sass`
 5. Click **Install**.
 
 ## Preferences 
