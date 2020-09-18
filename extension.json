@@ -1,7 +1,7 @@
 {
     "identifier": "vinecode.Sass",
     "name": "Sass",
-    "vendor": "Vine Code Limited",
+    "organization": "Vine Code Limited",
     "description": "Automatically compile scss files on save.",
     "version": "1.2",
     "categories": ["formatters"],
