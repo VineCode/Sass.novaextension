@@ -3,7 +3,7 @@
     "name": "Sass",
     "vendor": "Vine Code Limited",
     "description": "Automatically compile scss files on save.",
-    "version": "1.0",
+    "version": "1.2",
     "categories": ["formatters"],
     "repository": "https://github.com/vinecode/Sass.novaextension",
     "bugs": "https://github.com/vinecode/Sass.novaextension/issues",    
@@ -35,8 +35,15 @@
             "description": "Source maps are files that tell browsers or other tools that consume CSS how that CSS corresponds to the Sass files from which it was generated. They make it possible to see and even edit your Sass files in browsers.",
             "type": "enum",
             "values": ["External", "Embedded", "None"],
-            "default": "Yes" 
+            "default": "External" 
         },
+        {
+            "key": "VineCode.Sass.updatePath",
+            "title": "Update Path",
+            "description": "Manually set path that an update will be performed on, relative to the workspace directory",
+            "type": "string",
+            "placeholder": "assets/css" 
+        },                    
         {
             "key": "VineCode.Sass.execPath",
             "title": "Executable Path",

@@ -20,6 +20,9 @@ class SassService {
     if(!execPath) {
       execPath = 'sass';
     }            
+    
+    execPath = execPath.replace(/(\s+)/g, '\\$1');  
+    
     var options = [];
     
     options.push(execPath);
@@ -61,12 +64,18 @@ class SassService {
 
     // Get the parent directory
     var path = source.substr(0, source.lastIndexOf("/"));  
-    
+
     // If the current directory is scss move up a level
     if(path.substr(path.lastIndexOf("/") + 1).toLowerCase() == 'scss') {
         path = path.substr(0, path.lastIndexOf("/")); 
     }
-        
+    
+    // Get the update scope
+    var updatePath  = nova.config.get('VineCode.Sass.updatePath');
+    if(updatePath) {
+      path = nova.workspace.path + '/' + updatePath.replace(/^\/+/, '');
+    }
+ 
     var args = this.getArgs;
         args.push('--update');
         args.push(path);        

@@ -1,5 +1,11 @@
 # ChangeLog
 
+## Version 1.2 
+- Added preference to manually set the path that an update will be performed on, relative to the workspace directory
+
+## Version 1.1
+- Added preference for the compile scope
+
 ## Version 1.0
 - Icon change and internal re-structure
 
