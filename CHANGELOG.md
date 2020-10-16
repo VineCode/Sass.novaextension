@@ -1,5 +1,9 @@
 # ChangeLog
 
+## Version 1.3
+- Added support for .sass file extensions and indented format
+- Added preference for an output directory relative to workspace
+
 ## Version 1.2 
 - Added preference to manually set the path that an update will be performed on, relative to the workspace directory
 

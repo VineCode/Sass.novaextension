@@ -38,6 +38,14 @@ Tells Sass whether to emit a CSS file when an error occurs during compilation.
 `External, Internal, Off`<br/>
 Source maps are files that tell browsers or other tools that consume CSS how that CSS corresponds to the Sass files from which it was generated. They make it possible to see and even edit your Sass files in browsers. 
 
+**Update Path**<br/>
+`source/css/`<br/>
+Manually set the path that an update will be performed on, relative to the workspace directory.
+
+**Output Path**<br/>
+`dist/css/`<br/>
+Manually set the output path of the generated css files, relative to the workspace directory.
+
 **Executable Path**<br/>
 `/path/to/sass`<br/>
 Manually enter or select the scss binary location.

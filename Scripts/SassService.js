@@ -16,7 +16,7 @@ class SassService {
     var errorCss  = nova.config.get('VineCode.Sass.errorCss');
     var sourceMap = nova.config.get('VineCode.Sass.sourceMap'); 
     var execPath  = nova.config.get('VineCode.Sass.execPath');       
-    
+
     if(!execPath) {
       execPath = 'sass';
     }            
@@ -28,7 +28,7 @@ class SassService {
     options.push(execPath);
  
     if(cssStyle == 'Compressed') {
-      options.push('--style=compressed'); 
+      options.push('--style=compressed');   
     } else {
       options.push('--style=expanded');       
     }
@@ -58,9 +58,10 @@ class SassService {
   async compileSassUpdate(editor) {
     
     var source   = editor.document.path;
-    
+
     // Check that this is enabled 
-    if(source.slice((source.lastIndexOf(".") - 1 >>> 0) + 2) != 'scss') { return }
+    if(source.slice((source.lastIndexOf(".") - 1 >>> 0) + 2) != 'scss' && 
+       source.slice((source.lastIndexOf(".") - 1 >>> 0) + 2) != 'sass' ) { return }
 
     // Get the parent directory
     var path = source.substr(0, source.lastIndexOf("/"));  
@@ -72,14 +73,22 @@ class SassService {
     
     // Get the update scope
     var updatePath  = nova.config.get('VineCode.Sass.updatePath');
-    if(updatePath) {
+    if(updatePath && updatePath != 'null') { 
+      updatePath = updatePath.trim('/');
       path = nova.workspace.path + '/' + updatePath.replace(/^\/+/, '');
     }
- 
+    
+    // Check for an output path
+    var outputPath  = nova.config.get('VineCode.Sass.outputPath'); 
+    if(outputPath && outputPath != 'null') { 
+        outputPath = outputPath.trim('/');
+        path = path + ':' + outputPath.replace(/^\/+/, '');
+    }
+    
     var args = this.getArgs;
         args.push('--update');
         args.push(path);        
-
+    
     var options = { args: args };
 
     var process = new Process("/usr/bin/env", options);
