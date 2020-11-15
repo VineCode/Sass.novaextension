@@ -1,10 +1,13 @@
 # ChangeLog
 
+## Version 1.4
+- Fixed bug where the output path was not relative to the workspace path
+
 ## Version 1.3
 - Added support for .sass file extensions and indented format
 - Added preference for an output directory relative to workspace
 
-## Version 1.2 
+## Version 1.2
 - Added preference to manually set the path that an update will be performed on, relative to the workspace directory
 
 ## Version 1.1
@@ -32,13 +35,13 @@
 - Remove unused preference
 
 ## Version 0.6.3
-- Removed Editor command option 
+- Removed Editor command option
 - Implemented the preferences
 - Bug fixes and code cleanup
 - Wording updates
 - Added notification when a compile error occurs
 
-## Version 0.5.1 
+## Version 0.5.1
 - Just README changes
 
 ## Version 0.5

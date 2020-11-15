@@ -3,23 +3,23 @@
     "name": "Sass",
     "organization": "Vine Code Limited",
     "description": "Automatically compile scss files on save.",
-    "version": "1.3",
+    "version": "1.4",
     "categories": ["formatters"],
     "repository": "https://github.com/vinecode/Sass.novaextension",
-    "bugs": "https://github.com/vinecode/Sass.novaextension/issues",    
-    
+    "bugs": "https://github.com/vinecode/Sass.novaextension/issues",
+
     "main": "main.js",
     "entitlements": {
         "process": true
-    },    
-    "config": [        
+    },
+    "config": [
         {
             "key": "VineCode.Sass.cssStyle",
             "title": "CSS Style",
             "description": "Controls the output style of the resulting CSS.",
             "type": "enum",
             "values": ["Expanded", "Compressed"],
-            "default": "Expanded"               
+            "default": "Expanded"
         },
         {
             "key": "VineCode.Sass.errorCss",
@@ -27,7 +27,7 @@
             "description": "Tells Sass whether to emit a CSS file when an error occurs during compilation.",
             "type": "enum",
             "values": ["Yes", "No"],
-            "default": "Yes" 
+            "default": "Yes"
         },
         {
             "key": "VineCode.Sass.sourceMap",
@@ -35,28 +35,28 @@
             "description": "Source maps are files that tell browsers or other tools that consume CSS how that CSS corresponds to the Sass files from which it was generated. They make it possible to see and even edit your Sass files in browsers.",
             "type": "enum",
             "values": ["External", "Embedded", "None"],
-            "default": "External" 
+            "default": "External"
         },
         {
             "key": "VineCode.Sass.updatePath",
             "title": "Update Path",
             "description": "Manually set path that an update will be performed on, relative to the workspace directory",
             "type": "string",
-            "placeholder": "/source/css" 
-        },                    
+            "placeholder": "/source/css"
+        },
         {
             "key": "VineCode.Sass.outputPath",
             "title": "Output Path",
             "type": "string",
             "description": "Manually set the output path of the generated css files, relative to the workspace directory",
-            "placeholder": "/dist/css" 
-        }  ,                    
+            "placeholder": "/dist/css"
+        }  ,
         {
             "key": "VineCode.Sass.execPath",
             "title": "Executable Path",
             "type": "path",
             "description": "Manually set the path for the sass executable.",
-            "placeholder": "/usr/local/bin/sass" 
-        }     
-    ]    
+            "placeholder": "/usr/local/bin/sass"
+        }
+    ]
 }
