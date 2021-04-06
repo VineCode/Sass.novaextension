@@ -26,6 +26,8 @@ Before using this extension, you must ensure that `sass` is installed on your sy
 
 ## Preferences 
 
+Preferences are managed per project, these can be accessed via Project -> Project Settings -> Sass
+
 **CSS Style** <br/>
 `Expanded, Compressed`
 <br/>Controls the output style of the resulting CSS. 

@@ -1,5 +1,9 @@
 # ChangeLog
 
+## Version 1.5
+- Move config items to configWorkspace (Thanks to @JohnWickham)
+- Added a new preference to disable compile on save for the project
+
 ## Version 1.4
 - Fixed bug where the output path was not relative to the workspace path
 

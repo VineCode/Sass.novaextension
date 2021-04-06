@@ -3,7 +3,7 @@
     "name": "Sass",
     "organization": "Vine Code Limited",
     "description": "Automatically compile scss files on save.",
-    "version": "1.4",
+    "version": "1.5",
     "categories": ["formatters"],
     "repository": "https://github.com/vinecode/Sass.novaextension",
     "bugs": "https://github.com/vinecode/Sass.novaextension/issues",
@@ -14,8 +14,9 @@
     },
     "configWorkspace": [
         {
-            "key": "VineCode.Sass.workspaceEnable",
-            "title": "Compile Sass on Save",
+            "key": "VineCode.Sass.workspaceDisable",
+            "title": "Disable compile Sass on Save",
+            "description": "Disable compile on save for this project..",
             "type": "boolean"
         },
         {
