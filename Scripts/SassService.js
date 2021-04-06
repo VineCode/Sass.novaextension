@@ -12,10 +12,10 @@ class SassService {
 
   get getArgs() {
 
-    var cssStyle  = nova.config.get('VineCode.Sass.cssStyle');
-    var errorCss  = nova.config.get('VineCode.Sass.errorCss');
-    var sourceMap = nova.config.get('VineCode.Sass.sourceMap');
-    var execPath  = nova.config.get('VineCode.Sass.execPath');
+    var cssStyle  = nova.workspace.config.get('VineCode.Sass.cssStyle');
+    var errorCss  = nova.workspace.config.get('VineCode.Sass.errorCss');
+    var sourceMap = nova.workspace.config.get('VineCode.Sass.sourceMap');
+    var execPath  = nova.workspace.config.get('VineCode.Sass.execPath');
 
     if(!execPath) {
       execPath = 'sass';
@@ -56,9 +56,12 @@ class SassService {
   */
 
   async compileSassUpdate(editor) {
-
+    
+    var isWorkspaceEnabled  = nova.workspace.config.get('VineCode.Sass.workspaceEnable');
+    if (isWorkspaceEnabled == false) { return }
+    
     var source   = editor.document.path;
-
+    
     // Check that this is enabled
     if(source.slice((source.lastIndexOf(".") - 1 >>> 0) + 2) != 'scss' &&
        source.slice((source.lastIndexOf(".") - 1 >>> 0) + 2) != 'sass' ) { return }
@@ -72,14 +75,14 @@ class SassService {
     }
 
     // Get the update scope
-    var updatePath  = nova.config.get('VineCode.Sass.updatePath');
+    var updatePath  = nova.workspace.config.get('VineCode.Sass.updatePath');
     if(updatePath && updatePath != 'null') {
       updatePath = updatePath.trim('/');
       path = nova.workspace.path + '/' + updatePath.replace(/^\/+/, '');
     }
 
     // Check for an output path
-    var outputPath  = nova.config.get('VineCode.Sass.outputPath');
+    var outputPath  = nova.workspace.config.get('VineCode.Sass.outputPath');
     if(outputPath && outputPath != 'null') {
         outputPath = outputPath.trim('/');
         path = path + ':' + nova.workspace.path + '/' + outputPath.replace(/^\/+/, '');

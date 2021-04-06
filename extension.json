@@ -12,7 +12,12 @@
     "entitlements": {
         "process": true
     },
-    "config": [
+    "configWorkspace": [
+        {
+            "key": "VineCode.Sass.workspaceEnable",
+            "title": "Compile Sass on Save",
+            "type": "boolean"
+        },
         {
             "key": "VineCode.Sass.cssStyle",
             "title": "CSS Style",
@@ -50,7 +55,7 @@
             "type": "string",
             "description": "Manually set the output path of the generated css files, relative to the workspace directory",
             "placeholder": "/dist/css"
-        }  ,
+        },
         {
             "key": "VineCode.Sass.execPath",
             "title": "Executable Path",
