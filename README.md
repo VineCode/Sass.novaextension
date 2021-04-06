@@ -28,6 +28,9 @@ Before using this extension, you must ensure that `sass` is installed on your sy
 
 Preferences are managed per project, these can be accessed via Project -> Project Settings -> Sass
 
+**Disable compile Sass on Save** 
+<br/>Disable compile on save for this project..
+
 **CSS Style** <br/>
 `Expanded, Compressed`
 <br/>Controls the output style of the resulting CSS. 
