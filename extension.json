@@ -14,10 +14,11 @@
     },
     "configWorkspace": [
         {
-            "key": "VineCode.Sass.workspaceDisable",
-            "title": "Disable compile Sass on Save",
-            "description": "Disable compile on save for this project..",
-            "type": "boolean"
+            "key": "VineCode.Sass.workspaceEnable",
+            "title": "Enable compile Sass on Save",
+            "description": "Enable compile on save for this project..",
+            "type": "boolean",
+            "default": true
         },
         {
             "key": "VineCode.Sass.cssStyle",

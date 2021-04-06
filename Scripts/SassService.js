@@ -57,8 +57,8 @@ class SassService {
 
   async compileSassUpdate(editor) {
     
-    var isWorkspaceDisabled  = nova.workspace.config.get('VineCode.Sass.workspaceDisable');
-    if (isWorkspaceDisabled == true) { return }
+    var isWorkspaceEnable  = nova.workspace.config.get('VineCode.Sass.workspaceEnable');
+    if (isWorkspaceEnable == false) { return }
     
     var source   = editor.document.path;
     
