@@ -16,7 +16,7 @@
         {
             "key": "VineCode.Sass.workspaceEnable",
             "title": "Enable compile Sass on Save",
-            "description": "Enable compile on save for this project..",
+            "description": "Enable compile on save for this project.",
             "type": "boolean",
             "default": true
         },
@@ -47,7 +47,7 @@
         {
             "key": "VineCode.Sass.updatePath",
             "title": "Update Path",
-            "description": "Manually set path that an update will be performed on, relative to the workspace directory",
+            "description": "Manually set path that an update will be performed on, relative to the workspace directory.",
             "type": "string",
             "placeholder": "/source/css"
         },
@@ -55,7 +55,7 @@
             "key": "VineCode.Sass.outputPath",
             "title": "Output Path",
             "type": "string",
-            "description": "Manually set the output path of the generated css files, relative to the workspace directory",
+            "description": "Manually set the output path of the generated css files, relative to the workspace directory.",
             "placeholder": "/dist/css"
         },
         {
