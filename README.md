@@ -7,10 +7,13 @@ Converts scss files into css files automatically on save.
 - Automatically create source maps
 - Generated css can be compressed or expanded
 - Notification of compile errors
+- Compilation status, warnings, and complete errors in Nova's Extension Console
 
 ## Requirements
 
 Before using this extension, you must ensure that `sass` is installed on your system. One method is using [Homebrew](https://brew.sh).
+
+The extension requires a local Nova project. It is disabled for Remote Projects because Nova's extension process cannot run Sass against files stored only on a remote server. To work with a remote website, compile in a Local Project and use Nova Publishing to upload the generated CSS.
 
 ## Sass Insall
 
@@ -40,8 +43,8 @@ Preferences are managed per project, these can be accessed via Project -> Projec
 Tells Sass whether to emit a CSS file when an error occurs during compilation.
 
 **Generate Source Map**<br/>
-`External, Internal, Off`<br/>
-Source maps are files that tell browsers or other tools that consume CSS how that CSS corresponds to the Sass files from which it was generated. They make it possible to see and even edit your Sass files in browsers. 
+`External, Embedded, None`<br/>
+Source maps are files that tell browsers or other tools that consume CSS how that CSS corresponds to the Sass files from which it was generated. They make it possible to see and even edit your Sass files in browsers. Source maps are disabled by default and can be enabled per project.
 
 **Update Path**<br/>
 `source/css/`<br/>
@@ -51,9 +54,15 @@ Manually set the path that an update will be performed on, relative to the works
 `dist/css/`<br/>
 Manually set the output path of the generated css files, relative to the workspace directory.
 
-**Executable Path**<br/>
-`/path/to/sass`<br/>
-Manually enter or select the scss binary location.
+**Resolve Paths Relative to Sass File**<br/>
+`On, Off`<br/>
+When off (the default), Update Path and Output Path remain relative to the workspace root. When on, both paths are resolved from the directory containing the saved Sass file. This allows values such as `.` and `../css` and supports projects with multiple independent Sass directories.
+
+**Sass Executable**<br/>
+Select a detected Dart Sass installation or enter a custom executable path. The detected choices display the Sass version and location. When no path is selected, the extension automatically checks the standard Apple Silicon and Intel Homebrew locations before falling back to Nova's process `PATH`.
+
+**Check Sass Installation**<br/>
+Verifies the selected or automatically detected Sass executable and displays its version and location.
 
 ## Notes
 

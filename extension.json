@@ -3,14 +3,15 @@
     "name": "Sass",
     "organization": "Vine Code Limited",
     "description": "Automatically compile scss files on save.",
-    "version": "1.5",
+    "version": "1.6",
     "categories": ["formatters"],
     "repository": "https://github.com/vinecode/Sass.novaextension",
     "bugs": "https://github.com/vinecode/Sass.novaextension/issues",
 
     "main": "main.js",
     "entitlements": {
-        "process": true
+        "process": true,
+        "filesystem": "readwrite"
     },
     "configWorkspace": [
         {
@@ -42,7 +43,7 @@
             "description": "Source maps are files that tell browsers or other tools that consume CSS how that CSS corresponds to the Sass files from which it was generated. They make it possible to see and even edit your Sass files in browsers.",
             "type": "enum",
             "values": ["External", "Embedded", "None"],
-            "default": "External"
+            "default": "None"
         },
         {
             "key": "VineCode.Sass.updatePath",
@@ -59,11 +60,25 @@
             "placeholder": "/dist/css"
         },
         {
+            "key": "VineCode.Sass.relativePaths",
+            "title": "Resolve Paths Relative to Sass File",
+            "type": "boolean",
+            "description": "Resolve Update Path and Output Path from the saved Sass file's directory instead of the workspace root.",
+            "default": false
+        },
+        {
             "key": "VineCode.Sass.execPath",
-            "title": "Executable Path",
-            "type": "path",
-            "description": "Manually set the path for the sass executable.",
-            "placeholder": "/usr/local/bin/sass"
+            "title": "Sass Executable",
+            "type": "enum",
+            "description": "Select a detected Sass installation or enter a custom executable path.",
+            "resolve": "VineCode.Sass.resolveExecutables",
+            "allowsCustom": true
+        },
+        {
+            "title": "Check Sass Installation",
+            "description": "Verify the selected or automatically detected Sass executable and display its version.",
+            "type": "command",
+            "command": "VineCode.Sass.checkInstallation"
         }
     ]
 }

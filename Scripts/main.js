@@ -10,8 +10,16 @@ const SassService = require('./SassService');
 exports.activate = function() {
 	const Sass = new SassService();
 
+	nova.commands.register('VineCode.Sass.resolveExecutables', Sass.resolveExecutables.bind(Sass));
+	nova.commands.register('VineCode.Sass.checkInstallation', Sass.checkInstallation.bind(Sass));
+
 	// "Compile on Save"
 	nova.workspace.onDidAddTextEditor(editor => {
-		return editor.onWillSave(Sass.compileSassUpdate.bind(Sass));
+		if(editor.document.isRemote) {
+			Sass.notifyRemoteUnsupported();
+			return;
+		}
+
+		return editor.onDidSave(Sass.compileSassUpdate.bind(Sass));
 	});
 };
