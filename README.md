@@ -27,13 +27,29 @@ In Nova, choose **Extensions → Extension Library**, search for **Sass**, and c
 
 Use a local Nova project. Remote documents are skipped, with one notification per extension activation. Local documents are still eligible for compilation; opening a remote document does not disable the entire workspace. For remote websites, compile locally and use Nova Publishing to upload CSS and any source maps you need.
 
-## Manual compilation and issues
+## Automatic compilation
+
+By default, the extension automatically runs Sass after you save a local `.scss` or `.sass` file. Compilation starts after the save finishes, so it uses the latest contents on disk. You do not need to run a separate command.
+
+The project settings determine which entry points are compiled, where the CSS is written, and the output style. Saving a partial can update an entry point that loads it, provided that entry point is within the compilation scope. Sass performs an incremental update, skipping outputs it considers up to date. See [Compilation scope example](#compilation-scope-example) for the default layout and custom path examples.
+
+Compilation errors appear in a notification and, when a source location is available, in Nova's Issues sidebar. Full diagnostics are available in the Extension Console.
+
+To disable automatic compilation, set **Compilation & Output → Compile on Save → Off** in the Sass project settings. You can still use **Sass: Compile Now** as described below. Compilation runs on save, not while you type, and remote documents are not supported.
+
+## Manual compilation
 
 Open a saved local `.scss` or `.sass` file, then use **Extensions → Sass: Compile Now**, or search for **Sass: Compile Now** in the Command Palette. A key binding can be assigned in Nova's settings.
 
 **Compile Now** performs an incremental update using the same scope and output settings as saving the active Sass file. Unchanged outputs may be skipped.
 
-Compile Now is the manual equivalent of saving the active Sass file, including its existing directory/Update Path rules; it does not iterate over other open files. It works when compile-on-save is off. To target exactly one entry point, set Update Path to that file. Save modified local Sass/CSS files first; the command reports unsaved changes rather than compiling stale disk content. Remote files are unsupported. Nova's documented extension API does not expose the built-in Files sidebar's right-click menu, so the command is available through the menu and palette instead.
+Use it when **Compile on Save** is Off. It targets the active file's compilation scope, not every open file or website. To target exactly one entry point, set Update Path to that file.
+
+Save modified local Sass/CSS files first. The command asks you to save rather than compiling older content from disk. Remote files are unsupported.
+
+The command is available through the menu and palette, not the Files sidebar's right-click menu, which Nova's documented extension API does not expose.
+
+## Issues and warnings
 
 Located Sass errors and warnings appear in the Issues sidebar. Click an issue to open its source location, including imported partials. Results are replaced on the next completed compilation of the same scope; unrelated scopes retain their results. Full output and diagnostics without a recognised location remain in the Extension Console.
 
@@ -117,14 +133,70 @@ Saving either Sass file runs an update of `project/assets/css`. The entry point 
 
 In a project containing several websites, this default scope does not include neighbouring websites. An explicitly configured Update Path can broaden the scope. The parent-folder rule applies only when the saved file's immediate folder is named `scss`; deeper nested partials may need a custom Update Path.
 
+### Custom paths from the project root
+
+Use this when a project has one source directory and a separate output directory:
+
+```text
+project/
+  source/styles/main.scss
+  source/styles/partials/_header.scss
+  public/css/main.css
+```
+
+- **Update Path:** `source/styles`
+- **Output Path:** `public/css`
+- **Resolve Paths Relative to Sass File:** Off
+
+Saving either Sass file updates entry points under `source/styles` and writes CSS under `public/css`. Because the paths start at the project root, saving a nested partial does not change the scope. The entry point must load the partial.
+
+### File-relative paths for multiple websites
+
+Use this when several websites share the same folder layout:
+
+```text
+project/
+  site-a/assets/scss/main.scss
+  site-a/assets/scss/_header.scss
+  site-a/assets/css/main.css
+  site-b/assets/scss/main.scss
+  site-b/assets/scss/_header.scss
+  site-b/assets/css/main.css
+```
+
+- **Update Path:** `.`
+- **Output Path:** `../css`
+- **Resolve Paths Relative to Sass File:** On
+
+Saving `site-a/assets/scss/main.scss` updates `site-a/assets/scss` and outputs to `site-a/assets/css`. Saving the equivalent file in site-b uses site-b's directories instead. The same project settings work for both websites.
+
+Here, `.` explicitly selects the saved file's directory, overriding the automatic rule that would otherwise move up from a folder named `scss`.
+
+**Watch for nested partials:** these paths are relative to the file you save, not its entry point. Saving `scss/components/_button.scss` would target `scss/components` and output to `scss/css`. For nested layouts, use a fixed project-relative Update Path as in the previous example, or trigger compilation from the main file.
+
+### Compile a single entry point
+
+Use this when you want one stylesheet to be the compilation target, even when saving its nested partials:
+
+```text
+project/
+  source/styles/main.scss
+  source/styles/partials/_header.scss
+  public/css/site.css
+```
+
+- **Update Path:** `source/styles/main.scss`
+- **Output Path:** `public/css/site.css`
+- **Resolve Paths Relative to Sass File:** Off
+
+Saving `main.scss` or its loaded partial triggers an update of `main.scss`, producing `public/css/site.css`. A single-file input needs a CSS filename as its custom output, not just a folder. Leave Output Path blank to generate `source/styles/main.css` instead.
+
+These examples apply equally to automatic compilation and **Sass: Compile Now**. All use incremental updates, so unchanged outputs may be skipped.
+
 ## Troubleshooting
 
 - **Sass not found:** select the correct executable and use Check Sass Installation. Nova's process PATH may differ from your Terminal PATH.
-- **Warnings about `@import`:** these come from Dart Sass. Successful builds log warnings without an error notification. Migrate your stylesheets to `@use` and `@forward`; the extension does not rewrite them. See the [Sass migration guidance](https://sass-lang.com/documentation/breaking-changes/import/).
+- **Warnings about `@import`:** these are Dart Sass deprecation warnings, not compilation errors. To hide them from the Issues sidebar and editor highlights, set **Compilation & Output → Deprecation Warnings → Off** in the Sass project settings. Full diagnostics remain in the Extension Console, and compilation errors and other warnings are still shown. Hiding deprecations does not fix the underlying compatibility issue: migrate your stylesheets to `@use` and `@forward` when possible. The extension does not rewrite them. See the [Sass migration guidance](https://sass-lang.com/documentation/breaking-changes/import/).
 - **Compilation errors:** inspect Nova's Extension Console (enable extension development items in Nova Settings → General if necessary). The notification is abbreviated; the console contains full diagnostics.
 - **Unexpected or missing output:** check Update Path, Output Path, relative mode, and whether the entry point loads the saved partial. Compilation happens after save, not as you type.
 - **BOM remains:** cleanup only runs for CSS filenames reported by a successful Sass update. It does not sweep existing CSS or run after a failed update. Cleanup failures are logged in the Extension Console. Expanded CSS may contain an `@charset` declaration; that is not a BOM.
-
-## Development and publishing
-
-See [Support/publish.txt](Support/publish.txt) for local activation, release checks, and Extension Library submission instructions. Changes for 1.6 are listed in [CHANGELOG.md](CHANGELOG.md).
