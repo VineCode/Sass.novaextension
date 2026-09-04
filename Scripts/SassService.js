@@ -401,6 +401,7 @@ class SassService {
         // them. Restrict BOM cleanup to those files instead of rewriting every
         // CSS file in the output directory.
         stdOut.forEach(function(line) {
+          if(nova.workspace.config.get('VineCode.Sass.removeBom') === 'Off') { return; }
           var match = line.match(/\s+to\s+(.+\.css)\.\s*$/);
           if(match) {
             var cssPath = match[1];

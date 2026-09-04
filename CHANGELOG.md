@@ -2,6 +2,7 @@
 
 ## Version 1.6
 
+- Add Remove UTF-8 BOM (On by default); Off preserves Sass output without post-compilation BOM removal.
 - Add Deprecation Warnings (On by default), with immediate filtering of Issues and editor highlights while retaining errors, other warnings, and full console diagnostics.
 - Add Sass: Compile Now to the Extensions menu and Command Palette for the active Sass file, using the same compilation scope as saving, even with compile-on-save disabled.
 - Group settings into Compilation & Output, Paths, and Sass Installation.

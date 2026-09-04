@@ -73,6 +73,16 @@ function issues(service) { return [...service.issues.items.values()].flat(); }
     const css = source.replace('.scss', '.css');
     assert(fs.readFileSync(css, 'utf8').includes('é'));
     assert(!fs.readFileSync(css).subarray(0, 3).equals(Buffer.from([239, 187, 191])));
+    assert.equal(config['VineCode.Sass.removeBom'], 'On');
+    config['VineCode.Sass.removeBom'] = 'Off';
+    fs.unlinkSync(css);
+    await service.compileManually();
+    assert(fs.readFileSync(css, 'utf8').startsWith('\uFEFF'), 'Off preserves Sass BOM');
+    config['VineCode.Sass.removeBom'] = 'On';
+    fs.unlinkSync(css);
+    await service.compileManually();
+    assert(!fs.readFileSync(css, 'utf8').startsWith('\uFEFF'), 'On removes Sass BOM');
+    assert(fs.readFileSync(css, 'utf8').includes('é'), 'Unicode preserved');
     // An unchanged input is deliberately not updated.
     fs.writeFileSync(css, 'sentinel');
     await service.compileManually();
