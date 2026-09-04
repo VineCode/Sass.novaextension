@@ -2,7 +2,7 @@
     "identifier": "vinecode.Sass",
     "name": "Sass",
     "organization": "Vine Code Limited",
-    "description": "Automatically compile scss files on save.",
+    "description": "Automatically compile SCSS and Sass files after saving.",
     "version": "1.6",
     "categories": ["formatters"],
     "repository": "https://github.com/vinecode/Sass.novaextension",
@@ -17,7 +17,7 @@
         {
             "key": "VineCode.Sass.workspaceEnable",
             "title": "Enable compile Sass on Save",
-            "description": "Enable compile on save for this project..",
+            "description": "Compile local SCSS and Sass files after saving in this project.",
             "type": "boolean",
             "default": true
         },
@@ -48,7 +48,7 @@
         {
             "key": "VineCode.Sass.updatePath",
             "title": "Update Path",
-            "description": "Manually set path that an update will be performed on, relative to the workspace directory",
+            "description": "Input file or directory, relative to the workspace root (or the saved Sass file's directory when relative paths are enabled). Leave blank for automatic directory selection.",
             "type": "string",
             "placeholder": "/source/css"
         },
@@ -56,7 +56,7 @@
             "key": "VineCode.Sass.outputPath",
             "title": "Output Path",
             "type": "string",
-            "description": "Manually set the output path of the generated css files, relative to the workspace directory",
+            "description": "Output directory (or CSS filename for a single input file), relative to the workspace root unless relative paths are enabled. Leave blank to output beside the entry points.",
             "placeholder": "/dist/css"
         },
         {

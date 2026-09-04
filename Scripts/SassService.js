@@ -250,7 +250,10 @@ class SassService {
         args.push('--update');
         args.push(path);
 
-    var options = { args: args };
+    // Sass may print output paths relative to its working directory. Capture
+    // the same base for the process and subsequent filesystem cleanup.
+    var workingDirectory = nova.workspace.path || sourceDirectory;
+    var options = { args: args, cwd: workingDirectory };
 
     var process = new Process("/usr/bin/env", options);
 
@@ -275,10 +278,14 @@ class SassService {
         stdOut.forEach(function(line) {
           var match = line.match(/\s+to\s+(.+\.css)\.\s*$/);
           if(match) {
+            var cssPath = match[1];
+            if(cssPath.charAt(0) != '/') {
+              cssPath = nova.path.normalize(nova.path.join(workingDirectory, cssPath));
+            }
             try {
-              this.stripUtf8Bom(match[1]);
+              this.stripUtf8Bom(cssPath);
             } catch(error) {
-              console.error('Could not remove the BOM from ' + match[1] + ': ' + error);
+              console.error('Could not remove the BOM from ' + cssPath + ': ' + error);
             }
           }
         }, this);
