@@ -3,7 +3,7 @@
     "name": "Sass",
     "organization": "Vine Code Limited",
     "description": "Automatically compile SCSS and Sass files after saving.",
-    "version": "1.7",
+    "version": "1.7.1",
     "categories": [
         "formatters"
     ],
@@ -16,12 +16,12 @@
                 "title": "Compile Now",
                 "paletteTitle": "Sass: Compile Now",
                 "command": "VineCode.Sass.compileNow",
-                "when": "documentHasPath",
-                "filters": { "types": ["scss", "sass"] }
+                "when": "sassCanCompile"
             },
             {
                 "title": "Check Sass Installation",
-                "command": "VineCode.Sass.checkInstallation"
+                "command": "VineCode.Sass.checkInstallation",
+                "when": "true"
             }
         ],
         "editor": [
@@ -29,12 +29,12 @@
                 "title": "Compile Now",
                 "paletteTitle": "Sass: Compile Now",
                 "command": "VineCode.Sass.compileNow",
-                "when": "documentHasPath",
-                "filters": { "types": ["scss", "sass"] }
+                "when": "sassCanCompile"
             },
             {
                 "title": "Check Sass Installation",
-                "command": "VineCode.Sass.checkInstallation"
+                "command": "VineCode.Sass.checkInstallation",
+                "when": "true"
             }
         ]
     },

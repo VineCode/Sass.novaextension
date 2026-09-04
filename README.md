@@ -39,7 +39,7 @@ To disable automatic compilation, set **Compilation & Output → Compile on Save
 
 ## Manual compilation
 
-Open a saved local `.scss` or `.sass` file, then use **Extensions → Sass → Compile Now** or **Editor → Sass → Compile Now**, or search for **Sass: Compile Now** in the Command Palette. Compile Now is restricted to saved `.scss` and `.sass` files. Both menus also offer **Check Sass Installation**. A key binding can be assigned in Nova's settings.
+Open a saved local `.scss` or `.sass` file, then use **Extensions → Sass → Compile Now** or **Editor → Sass → Compile Now**, or search for **Sass: Compile Now** in the Command Palette. Compile Now is enabled for the active saved local `.scss` or `.sass` file. Both menus also offer **Check Sass Installation**, which does not require a Sass file. Nova may disable the Editor menu itself when no text editor is open; use the Extensions menu in that case. A key binding can be assigned in Nova's settings.
 
 **Compile Now** performs an incremental update using the same scope and output settings as saving the active Sass file. Unchanged outputs may be skipped.
 

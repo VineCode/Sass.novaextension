@@ -10,6 +10,7 @@ const SassService = require('./SassService');
 exports.activate = function() {
 	const Sass = new SassService();
 	nova.subscriptions.add(Sass);
+	Sass.startMenuAvailability();
 	nova.subscriptions.add(nova.workspace.config.onDidChange(
 		'VineCode.Sass.showDeprecationWarnings', () => Sass.publishIssues()));
 

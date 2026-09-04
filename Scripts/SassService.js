@@ -20,7 +20,27 @@ class SassService {
 
   dispose() {
     this.disposed = true;
+    clearInterval(this.menuTimer);
+    if(this.menuTimer) nova.workspace.context.set('sassCanCompile', false);
     this.issues.dispose();
+  }
+
+  startMenuAvailability() {
+    this.updateMenuAvailability();
+    // Nova has no active-editor-change event. Check lightweight document
+    // metadata only; context is transient and never writes project settings.
+    this.menuTimer = setInterval(() => this.updateMenuAvailability(), 250);
+  }
+
+  updateMenuAvailability() {
+    if(this.disposed) return;
+    const editor = nova.workspace.activeTextEditor;
+    const doc = editor && editor.document;
+    const enabled = !!(doc && doc.path && !doc.isRemote && /\.(scss|sass)$/i.test(doc.path));
+    if(enabled !== this.menuCanCompile) {
+      nova.workspace.context.set('sassCanCompile', enabled);
+      this.menuCanCompile = enabled;
+    }
   }
 
   notify(message) {

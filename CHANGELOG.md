@@ -1,5 +1,10 @@
 # ChangeLog
 
+## Version 1.7.1
+
+- Correct Compile Now availability in the Extensions menu using the active local Sass file.
+- Keep Check Sass Installation independent of the active file type in both menus.
+
 ## Version 1.7
 
 - Add Sass menu groups with Compile Now and Check Sass Installation in the Extensions and Editor menus.

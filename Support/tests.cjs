@@ -10,9 +10,11 @@ for(const menu of ['extensions', 'editor']) {
   const [compile, check] = manifest.commands[menu];
   assert.equal(compile.title, 'Compile Now');
   assert.equal(compile.command, 'VineCode.Sass.compileNow');
-  assert.equal(compile.when, 'documentHasPath');
-  assert.deepEqual(compile.filters.types, ['scss', 'sass']);
+  assert.equal(compile.when, 'sassCanCompile');
+  assert.equal(compile.filters, undefined);
   assert.equal(check.command, 'VineCode.Sass.checkInstallation');
+  assert.equal(check.when, 'true');
+  assert.equal(check.filters, undefined);
 }
 const root = fs.mkdtempSync(path.join(os.tmpdir(), 'nova-sass-tests-'));
 const config = Object.fromEntries(require('../extension.json').configWorkspace
@@ -74,6 +76,22 @@ function issues(service) { return [...service.issues.items.values()].flat(); }
     config['VineCode.Sass.workspaceEnable'] = false;
     config['VineCode.Sass.cssStyle'] = 'Compressed';
     const service = new Service();
+    const menuWrites = [];
+    nova.workspace.context = { set: (key, value) => menuWrites.push([key, value]) };
+    for(const [document, expected] of [
+      [null, false], [{path: '/tmp/a.js'}, false], [{path: '/tmp/a.scss'}, true],
+      [{path: '/tmp/a.sass'}, true], [{path: '/tmp/a.SCSS'}, true],
+      [{path: '/tmp/a.scss', isRemote: true}, false], [{path: null}, false]
+    ]) {
+      nova.workspace.activeTextEditor = document ? {document} : null;
+      service.updateMenuAvailability();
+      assert.deepEqual(menuWrites.at(-1), ['sassCanCompile', expected]);
+      const count = menuWrites.length;
+      service.updateMenuAvailability();
+      assert.equal(menuWrites.length, count, 'Unchanged menu state must not write context');
+    }
+    nova.workspace.activeTextEditor = editor;
+    service.updateMenuAvailability();
     assert.equal(config['VineCode.Sass.workspaceEnable'], 'Off', 'legacy checkbox migrated');
     await service.compileSassUpdate(editor);
     assert.equal(launches.length, 0, 'automatic compilation disabled');
