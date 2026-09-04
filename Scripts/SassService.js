@@ -7,8 +7,114 @@
 
 class SassService {
 	constructor() {
+		// Keep preferences saved by the former checkbox controls.
+		for(const key of ['VineCode.Sass.workspaceEnable', 'VineCode.Sass.showDeprecationWarnings']) {
+			const value = nova.workspace.config.get(key);
+			if(typeof value === 'boolean') { nova.workspace.config.set(key, value ? 'On' : 'Off'); }
+		}
 		this.remoteUnsupportedNotified = false;
+		this.issues = new IssueCollection('Sass');
+		this.issueRuns = new Map();
+		this.runNumbers = new Map();
 	}
+
+  dispose() {
+    this.disposed = true;
+    this.issues.dispose();
+  }
+
+  notify(message) {
+    let request = new NotificationRequest('sass-command');
+    request.title = 'Sass';
+    request.body = message;
+    nova.notifications.add(request);
+  }
+
+  compileManually() {
+    const editor = nova.workspace.activeTextEditor;
+    if(!editor || !editor.document.path || !/\.(scss|sass)$/i.test(editor.document.path)) {
+      this.notify('Open a saved .scss or .sass file first. Its project settings determine the compilation scope.');
+      return;
+    }
+    if(editor.document.isRemote) {
+      this.notifyRemoteUnsupported();
+      return;
+    }
+    // Partials elsewhere in the workspace may be dependencies. Do not silently
+    // compile their older on-disk contents or save unrelated documents for users.
+    const editors = nova.workspace.textEditors || [editor];
+    if(editors.some(item => !item.document.isRemote && item.document.isDirty &&
+        (/\.(scss|sass|css)$/i.test(item.document.path || '') || item === editor))) {
+      this.notify('Save your modified Sass/CSS files, then run the compile command again.');
+      return;
+    }
+    return this.compileSassUpdate(editor, { manual: true });
+  }
+
+  updateIssues(lines, workingDirectory, scope, runNumber) {
+    if(this.disposed || this.runNumbers.get(scope) !== runNumber) { return; }
+    const results = [];
+    let diagnostic = null;
+    let inSnippet = false;
+    for(const raw of lines) {
+      const line = raw.replace(/\x1b\[[0-9;]*m/g, '').trim();
+      const header = line.match(/^(Error|WARNING|DEPRECATION WARNING(?:\s*\[[^\]]+\])?):\s*(.*)$/i);
+      if(header) {
+        diagnostic = { message: header[2], warning: header[1].toLowerCase() !== 'error',
+          deprecation: /^DEPRECATION WARNING/i.test(header[1]) };
+        inSnippet = false;
+        continue;
+      }
+      if(!diagnostic) { continue; }
+      // The first stack frame is the actual source, including imported partials.
+      const location = line.match(/^(.+?)\s+(\d+):(\d+)\s+.+$/);
+      if(location) {
+        let path = location[1];
+        if(path.startsWith('file://')) {
+          try { path = decodeURIComponent(path.slice(7)); } catch(error) { diagnostic = null; continue; }
+        }
+        if(!/^[a-z]+:/i.test(path)) {
+          if(path.charAt(0) !== '/') { path = nova.path.join(workingDirectory, path); }
+          path = nova.path.normalize(path);
+          const issue = new Issue();
+          issue.message = diagnostic.message || 'Sass diagnostic';
+          issue.source = 'Dart Sass';
+          issue.severity = diagnostic.warning ? IssueSeverity.Warning : IssueSeverity.Error;
+          issue.line = Number(location[2]);
+          issue.column = Number(location[3]);
+          const uri = 'file://' + path.split('/').map(encodeURIComponent).join('/');
+          results.push({ uri: uri, issue: issue, deprecation: diagnostic.deprecation });
+        }
+        diagnostic = null;
+      } else if(/[╷╵│]/.test(line)) {
+        inSnippet = true;
+      } else if(line && !inSnippet) {
+        diagnostic.message += (diagnostic.message ? '\n' : '') + line;
+      }
+    }
+    // Retain issues from other compilation scopes, replacing only this run's.
+    this.issueRuns.set(scope, results);
+    this.publishIssues();
+  }
+
+  publishIssues() {
+    if(this.disposed) { return; }
+    const preference = nova.workspace.config.get('VineCode.Sass.showDeprecationWarnings');
+    const showDeprecations = preference !== false && preference !== 'Off';
+    this.issues.clear();
+    const grouped = new Map();
+    for(const entries of this.issueRuns.values()) {
+      for(const entry of entries) {
+        if(entry.deprecation && !showDeprecations) { continue; }
+        const existing = grouped.get(entry.uri) || [];
+        if(!existing.some(issue => issue.line === entry.issue.line &&
+            issue.column === entry.issue.column && issue.message === entry.issue.message &&
+            issue.severity === entry.issue.severity)) { existing.push(entry.issue); }
+        grouped.set(entry.uri, existing);
+      }
+    }
+    for(const [uri, issues] of grouped) { this.issues.set(uri, issues); }
+  }
 
   notifyRemoteUnsupported() {
     if(this.remoteUnsupportedNotified) { return; }
@@ -112,7 +218,7 @@ class SassService {
 
       if(installation) {
         var location = installation.path == 'sass' ? 'Nova process PATH' : installation.path;
-        request.title = nova.localize("Dart Sass " + installation.version + " is available");
+        request.title = nova.localize("Dart Sass " + installation.version + " is installed");
         request.body = nova.localize("Executable: " + location);
       } else {
         request.title = nova.localize("Sass executable not found");
@@ -211,16 +317,17 @@ class SassService {
   Update the file sets
   */
 
-  async compileSassUpdate(editor) {
+  async compileSassUpdate(editor, requestOptions = {}) {
     
     var isWorkspaceEnable  = nova.workspace.config.get('VineCode.Sass.workspaceEnable');
-    if (isWorkspaceEnable == false) { return }
+    if ((isWorkspaceEnable === false || isWorkspaceEnable === 'Off') && !requestOptions.manual) { return }
+    if(editor.document.isRemote) { this.notifyRemoteUnsupported(); return; }
     
     var source   = editor.document.path;
+    if(!source) { return; }
     
     // Check that this is enabled
-    if(source.slice((source.lastIndexOf(".") - 1 >>> 0) + 2) != 'scss' &&
-       source.slice((source.lastIndexOf(".") - 1 >>> 0) + 2) != 'sass' ) { return }
+    if(!/\.(scss|sass)$/i.test(source)) { return; }
 
     // Get the parent directory
     var sourceDirectory = source.substr(0, source.lastIndexOf("/"));
@@ -239,14 +346,20 @@ class SassService {
       path = this.resolveConfiguredPath(updatePath, sourceDirectory, useRelativePaths);
     }
 
+    const compilationInput = path;
     // Check for an output path
     var outputPath  = nova.workspace.config.get('VineCode.Sass.outputPath');
     if(outputPath && outputPath != 'null') {
         outputPath = this.resolveConfiguredPath(outputPath, sourceDirectory, useRelativePaths);
         path = path + ':' + outputPath;
+    } else if(/\.(scss|sass)$/i.test(path)) {
+        // A single-file update needs an explicit output, otherwise Sass tries
+        // stdout and rejects --update. Default to CSS beside the input file.
+        path = path + ':' + path.replace(/\.(scss|sass)$/i, '.css');
     }
 
     var args = this.getArgs;
+        args.push('--no-color');
         args.push('--update');
         args.push(path);
 
@@ -255,7 +368,17 @@ class SassService {
     var workingDirectory = nova.workspace.path || sourceDirectory;
     var options = { args: args, cwd: workingDirectory };
 
-    var process = new Process("/usr/bin/env", options);
+    const scope = workingDirectory + '\n' + nova.path.normalize(compilationInput);
+    const runNumber = (this.runNumbers.get(scope) || 0) + 1;
+    this.runNumbers.set(scope, runNumber);
+    let process;
+    try {
+      process = new Process("/usr/bin/env", options);
+    } catch(error) {
+      console.error(error);
+      this.notify('Could not launch Sass: ' + error);
+      return false;
+    }
 
     var stdOut = new Array;
     process.onStdout(function(line) {
@@ -270,6 +393,8 @@ class SassService {
     });
 
     process.onDidExit(function(status) {
+
+      this.updateIssues(stdErr, workingDirectory, scope, runNumber);
 
       if(status == 0) {
         // Sass writes the generated file names to stdout when --update compiles
@@ -297,6 +422,9 @@ class SassService {
         }
 
         nova.notifications.cancel("sass-error");
+        if(requestOptions.manual) {
+          this.notify('Sass update completed (unchanged outputs may be skipped).');
+        }
         return;
       }
 
@@ -334,7 +462,13 @@ class SassService {
 
     }, this);
 
-    process.start();
+    try {
+      process.start();
+    } catch(error) {
+      console.error(error);
+      this.notify('Could not launch Sass: ' + error);
+      return false;
+    }
 
     return true;
   }

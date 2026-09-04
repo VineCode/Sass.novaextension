@@ -8,10 +8,12 @@ extension.json
     Extension metadata, permissions, entry point, version, and workspace settings.
 
 Scripts/main.js
-    Activates the extension and registers the compile-after-save listener.
+    Activates the extension, registers save and manual compilation commands,
+    and refreshes Issues when the deprecation display preference changes.
 
 Scripts/SassService.js
-    Builds the Dart Sass command, runs it, reports errors, and removes a UTF-8 BOM
+    Builds the Dart Sass command, runs it, publishes located diagnostics to
+    Issues, reports errors, migrates checkbox preferences, and removes a UTF-8 BOM
     from CSS files reported as generated when the run exits successfully.
 
 Scripts/SassService.min.js
@@ -25,7 +27,9 @@ Support/
     Development fixtures, retained generated output, and icon assets. The active
     icon source is extension-icon-source.png; the 3D alternatives are not active.
 
-There is no build or minification step and no checked-in automated test suite.
+There is no build or minification step. Run `node Support/tests.cjs` for the
+regression suite (requires Node.js and Dart Sass). It uses mocked Nova APIs and
+real Sass compilation in disposable temporary directories, not the live fixtures.
 Nova loads Scripts/main.js and its unminified SassService.js dependency directly.
 Do not regenerate the unused minified file as part of release preparation.
 
@@ -48,10 +52,12 @@ Development and testing
 
 1. Open Sass.novaextension as a project in Nova.
 2. Choose Extensions > Activate Project as Extension.
-3. Open Project > Project Settings > Languages & Extensions > Sass and check the
+3. Open a separate local test project OUTSIDE the .novaextension bundle. In that
+   project, open Project > Project Settings > Languages & Extensions > Sass and check the
    workspace settings. Avoid running an installed copy and a development copy
    simultaneously when checking for duplicate compilation or notifications.
-4. Use a disposable local test project/copy of the fixtures. Save
+4. Copy fixtures into that separate test project, retaining Support/ if using
+   the example paths below. Save
    Support/master.scss and Support/alternative.sass with blank Update Path and
    Output Path settings to test directory compilation. To isolate an entry point,
    set Update Path to Support/master.scss and leave Output Path blank.
@@ -61,6 +67,11 @@ Development and testing
 6. After changing JavaScript, deactivate and reactivate the project extension if
    Nova does not reload it automatically.
 7. Choose Extensions > Deactivate Project as Extension when finished.
+
+Do not test saves inside the activated extension bundle: development auto-reload
+can restart the extension after a file changes and clear its Issues collection.
+This can make diagnostics briefly appear and disappear. Test in a separate
+project, keeping the extension project open for editing/activation only.
 
 Remote Projects are intentionally unsupported. When Nova identifies an editor's
 document as remote, the extension displays one notification and does not register
@@ -82,7 +93,8 @@ Sass installation testing
 
 Open the Sass project settings and reload the Sass Executable choices. Confirm that
 each detected installation displays its version and path. Select an installation
-and use "Check Sass Installation" to verify its success notification. Also test an
+and use "Check Sass Installation" to verify "Dart Sass [version] is installed"
+and the executable location. Also test an
 invalid custom path and confirm that the failure notification explains the remedy.
 With no saved selection, confirm that the first detected executable becomes selected.
 The Check button's spinner must stop as soon as its notification appears, and
@@ -104,6 +116,14 @@ calling a release stable. Bundle validation is not a runtime or UI test.
 
 - Test valid SCSS and valid indented Sass, and changes to a loaded partial.
 - Confirm save-once behaviour and disabling compile on save.
+- Verify the three sections: Compilation & Output, Paths, Sass Installation.
+  Compile on Save is first. Both On/Off radio controls default to On; saved
+  boolean preferences must migrate to the matching On/Off selection.
+- Toggle Deprecation Warnings Off/On with populated Issues. Deprecations should
+  hide/reappear immediately; ordinary warnings, errors, popups, and console
+  diagnostics must remain unaffected.
+- Check empty path placeholders and the Paths heading describe the css/scss
+  defaults. Placeholders must not be saved as actual configuration values.
 - Test Expanded/Compressed and all three source-map choices. None does not
   remove old map files; use clean output directories for each test.
 - Test Error CSS Yes/No, a syntax error, then a successful save. Check full
@@ -117,6 +137,16 @@ calling a release stable. Bundle validation is not a runtime or UI test.
 - Test executable selection and the Check button in Nova itself, including
   dismissing the notification and invalid paths. Mocks cannot verify the UI.
 - Test a remote document and confirm local documents are still usable.
+- With compile-on-save off, test Compile Now from the Extensions
+  menu and Command Palette. Open a saved Sass file first. Save dirty Sass/CSS
+  documents before retrying a blocked command. Verify it uses the active file's
+  save scope, and test both directory and single-file Update Paths.
+  The menu label is "Sass: Compile Now". Also test a single-file Update Path
+  with blank Output Path: its CSS should be generated beside the input.
+- Click a syntax error in an imported partial in the Issues sidebar. Fix it and
+  compile again; the issue should clear. Check warnings and separate scopes too.
+- Nova's built-in Files sidebar context menu is not an available extension hook;
+  no right-click command is included. See https://docs.nova.app/extensions/commands/
 
 Review snapshot: 4 September 2026 (version 1.6)
 ----------------------------------------------
@@ -133,6 +163,15 @@ Not verified in this review: end-to-end Nova save behaviour, settings UI/spinner
 remote connection handling, and the complete regression checklist above.
 Treat 1.6 as a release candidate until those runtime checks pass. These results
 describe this review only and must be updated after subsequent testing.
+
+Manual compilation/Issues follow-up: the checked-in regression suite passes
+against Dart Sass 1.80.6, including incremental builds, single-file
+and directory input, BOM prevention, dirty/remote guards, imported-partial errors,
+issue clearing, warnings, and stale same-scope results. In-app menu availability
+and clicking Issues were subsequently exercised by the user: issue navigation
+worked in a separate project, and the settings grouping was visually approved.
+The suite also covers deprecation filtering/restoration and legacy checkbox
+migration. This does not establish that every manual checklist item has passed.
 
 Before publishing
 -----------------

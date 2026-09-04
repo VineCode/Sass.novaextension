@@ -4,81 +4,137 @@
     "organization": "Vine Code Limited",
     "description": "Automatically compile SCSS and Sass files after saving.",
     "version": "1.6",
-    "categories": ["formatters"],
+    "categories": [
+        "formatters"
+    ],
     "repository": "https://github.com/vinecode/Sass.novaextension",
     "bugs": "https://github.com/vinecode/Sass.novaextension/issues",
-
     "main": "main.js",
+    "commands": {
+        "extensions": [
+            {
+                "title": "Sass: Compile Now",
+                "paletteTitle": "Sass: Compile Now",
+                "command": "VineCode.Sass.compileNow"
+            }
+        ]
+    },
     "entitlements": {
         "process": true,
         "filesystem": "readwrite"
     },
     "configWorkspace": [
         {
-            "key": "VineCode.Sass.workspaceEnable",
-            "title": "Enable compile Sass on Save",
-            "description": "Compile local SCSS and Sass files after saving in this project.",
-            "type": "boolean",
-            "default": true
+            "title": "Compilation & Output",
+            "type": "section",
+            "children": [
+                {
+                    "key": "VineCode.Sass.workspaceEnable",
+                    "title": "Compile on Save",
+                    "description": "Compile local SCSS and Sass files after saving in this project. Sass: Compile Now remains available when Off.",
+                    "type": "enum",
+                    "values": [
+                        "On",
+                        "Off"
+                    ],
+                    "radio": true,
+                    "default": "On"
+                },
+                {
+                    "key": "VineCode.Sass.cssStyle",
+                    "title": "CSS Style",
+                    "description": "Controls the output style of the resulting CSS.",
+                    "type": "enum",
+                    "values": [
+                        "Expanded",
+                        "Compressed"
+                    ],
+                    "default": "Expanded"
+                },
+                {
+                    "key": "VineCode.Sass.sourceMap",
+                    "title": "Generate Source Map",
+                    "description": "Source maps are files that tell browsers or other tools that consume CSS how that CSS corresponds to the Sass files from which it was generated. They make it possible to see and even edit your Sass files in browsers.",
+                    "type": "enum",
+                    "values": [
+                        "External",
+                        "Embedded",
+                        "None"
+                    ],
+                    "default": "None"
+                },
+                {
+                    "key": "VineCode.Sass.errorCss",
+                    "title": "Error CSS",
+                    "description": "Tells Sass whether to emit a CSS file when an error occurs during compilation.",
+                    "type": "enum",
+                    "values": [
+                        "Yes",
+                        "No"
+                    ],
+                    "default": "Yes"
+                },
+                {
+                    "key": "VineCode.Sass.showDeprecationWarnings",
+                    "title": "Deprecation Warnings",
+                    "description": "Show Sass deprecations in the Issues sidebar and editor. Errors and other warnings remain visible. Full diagnostics are always logged to the Extension Console.",
+                    "type": "enum",
+                    "values": [
+                        "On",
+                        "Off"
+                    ],
+                    "radio": true,
+                    "default": "On"
+                }
+            ]
         },
         {
-            "key": "VineCode.Sass.cssStyle",
-            "title": "CSS Style",
-            "description": "Controls the output style of the resulting CSS.",
-            "type": "enum",
-            "values": ["Expanded", "Compressed"],
-            "default": "Expanded"
+            "title": "Paths",
+            "description": "Leave both paths blank for automatic compilation: use the saved file's folder, or its parent when the folder is named scss (so css/scss uses css). Generated CSS is placed beside each Sass entry point. Custom paths start from the project root unless relative paths are enabled below.",
+            "type": "section",
+            "children": [
+                {
+                    "key": "VineCode.Sass.updatePath",
+                    "title": "Update Path",
+                    "description": "Optional file or folder to compile instead of the automatic scope.",
+                    "type": "string",
+                    "placeholder": "Automatic: saved folder (parent if scss)"
+                },
+                {
+                    "key": "VineCode.Sass.outputPath",
+                    "title": "Output Path",
+                    "type": "string",
+                    "description": "Optional output folder, or a CSS filename when Update Path targets a single file.",
+                    "placeholder": "Automatic: beside each Sass entry point"
+                },
+                {
+                    "key": "VineCode.Sass.relativePaths",
+                    "title": "Resolve Paths Relative to Sass File",
+                    "type": "boolean",
+                    "description": "Resolve custom Update Path and Output Path values from the saved Sass file's folder instead of the project root. Blank paths keep the automatic behaviour above.",
+                    "default": false
+                }
+            ]
         },
         {
-            "key": "VineCode.Sass.errorCss",
-            "title": "Error CSS",
-            "description": "Tells Sass whether to emit a CSS file when an error occurs during compilation.",
-            "type": "enum",
-            "values": ["Yes", "No"],
-            "default": "Yes"
-        },
-        {
-            "key": "VineCode.Sass.sourceMap",
-            "title": "Generate Source Map",
-            "description": "Source maps are files that tell browsers or other tools that consume CSS how that CSS corresponds to the Sass files from which it was generated. They make it possible to see and even edit your Sass files in browsers.",
-            "type": "enum",
-            "values": ["External", "Embedded", "None"],
-            "default": "None"
-        },
-        {
-            "key": "VineCode.Sass.updatePath",
-            "title": "Update Path",
-            "description": "Input file or directory, relative to the workspace root (or the saved Sass file's directory when relative paths are enabled). Leave blank for automatic directory selection.",
-            "type": "string",
-            "placeholder": "/source/css"
-        },
-        {
-            "key": "VineCode.Sass.outputPath",
-            "title": "Output Path",
-            "type": "string",
-            "description": "Output directory (or CSS filename for a single input file), relative to the workspace root unless relative paths are enabled. Leave blank to output beside the entry points.",
-            "placeholder": "/dist/css"
-        },
-        {
-            "key": "VineCode.Sass.relativePaths",
-            "title": "Resolve Paths Relative to Sass File",
-            "type": "boolean",
-            "description": "Resolve Update Path and Output Path from the saved Sass file's directory instead of the workspace root.",
-            "default": false
-        },
-        {
-            "key": "VineCode.Sass.execPath",
-            "title": "Sass Executable",
-            "type": "enum",
-            "description": "Select a detected Sass installation or enter a custom executable path.",
-            "resolve": "VineCode.Sass.resolveExecutables",
-            "allowsCustom": true
-        },
-        {
-            "title": "Check Sass Installation",
-            "description": "Verify the selected or automatically detected Sass executable and display its version.",
-            "type": "command",
-            "command": "VineCode.Sass.checkInstallation"
+            "title": "Sass Installation",
+            "type": "section",
+            "children": [
+                {
+                    "key": "VineCode.Sass.execPath",
+                    "title": "Sass Executable",
+                    "type": "enum",
+                    "description": "Select a detected Sass installation or enter a custom executable path.",
+                    "resolve": "VineCode.Sass.resolveExecutables",
+                    "allowsCustom": true
+                },
+                {
+                    "title": "Check Sass Installation",
+                    "description": "Verify the selected or automatically detected Sass executable and display its version.",
+                    "type": "command",
+                    "command": "VineCode.Sass.checkInstallation"
+                }
+            ]
         }
     ]
 }
