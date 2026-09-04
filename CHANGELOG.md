@@ -1,5 +1,11 @@
 # ChangeLog
 
+## Version 1.7
+
+- Add Sass menu groups with Compile Now and Check Sass Installation in the Extensions and Editor menus.
+- Restrict Compile Now menu availability to saved SCSS and Sass files.
+- Compilation behaviour, saved settings and defaults are unchanged from 1.6.
+
 ## Version 1.6
 
 - Add Remove UTF-8 BOM (On by default); Off preserves Sass output without post-compilation BOM removal.

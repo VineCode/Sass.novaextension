@@ -5,6 +5,15 @@ const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
 const { spawnSync } = require('node:child_process');
+const manifest = require('../extension.json');
+for(const menu of ['extensions', 'editor']) {
+  const [compile, check] = manifest.commands[menu];
+  assert.equal(compile.title, 'Compile Now');
+  assert.equal(compile.command, 'VineCode.Sass.compileNow');
+  assert.equal(compile.when, 'documentHasPath');
+  assert.deepEqual(compile.filters.types, ['scss', 'sass']);
+  assert.equal(check.command, 'VineCode.Sass.checkInstallation');
+}
 const root = fs.mkdtempSync(path.join(os.tmpdir(), 'nova-sass-tests-'));
 const config = Object.fromEntries(require('../extension.json').configWorkspace
   .flatMap(item => item.children || [item])
