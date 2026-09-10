@@ -3,12 +3,13 @@
     "name": "Sass",
     "organization": "Vine Code Limited",
     "description": "Automatically compile SCSS and Sass files after saving.",
-    "version": "1.7.1",
+    "version": "1.7.2",
     "categories": [
         "formatters"
     ],
     "repository": "https://github.com/vinecode/Sass.novaextension",
     "bugs": "https://github.com/vinecode/Sass.novaextension/issues",
+    "funding": "https://github.com/sponsors/VineCode",
     "main": "main.js",
     "commands": {
         "extensions": [

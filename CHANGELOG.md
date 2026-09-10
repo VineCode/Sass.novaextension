@@ -1,5 +1,9 @@
 # ChangeLog
 
+## Version 1.7.2
+
+- Add a GitHub Sponsors link to the extension details.
+
 ## Version 1.7.1
 
 - Correct Compile Now availability in the Extensions menu using the active local Sass file.

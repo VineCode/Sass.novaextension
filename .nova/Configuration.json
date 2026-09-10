@@ -1,3 +1,4 @@
 {
+  "VineCode.JsMin.minifyOnSave" : "Yes",
   "VineCode.Sass.execPath" : "\/opt\/homebrew\/bin\/sass"
 }
